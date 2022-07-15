@@ -1,5 +1,7 @@
 package frame;
 
+import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.components.DatePickerSettings;
 import helpers.ComboBoxItem;
 import helpers.koneksi;
 
@@ -24,6 +26,8 @@ public class KecamatanInputFrame extends JFrame {
     private JLabel luasLabel;
     private JTextField luasTextField;
     private JTextField populasiTextField;
+    private JTextField emailTextField;
+    private DatePicker tanggalMulaiDatePicker;
 
     private ButtonGroup klasifikasiButtonGroup;
 
@@ -65,6 +69,8 @@ public class KecamatanInputFrame extends JFrame {
 
             populasiTextField.setText(String.valueOf(rs.getInt("populasi")));
             luasTextField.setText(String.valueOf(rs.getDouble("luas")));
+            emailTextField.setText(rs.getString("email"));
+            tanggalMulaiDatePicker.setText(rs.getString("tanggalMulai"));
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -112,6 +118,24 @@ public class KecamatanInputFrame extends JFrame {
                 return;
             }
 
+            String email = emailTextField.getText();
+            if (!email.contains("@") || !email.contains(".")){
+                JOptionPane.showMessageDialog(null,
+                        "Isi dengan Email Valid",
+                        "Validasi Email", JOptionPane.WARNING_MESSAGE);
+                emailTextField.requestFocus();
+                return;
+            }
+
+            String tanggalMulai = tanggalMulaiDatePicker.getText();
+            if (tanggalMulai.equals("")){
+                JOptionPane.showMessageDialog(null,
+                        "Isi Tanggal Mulai",
+                        "Validasi Data Kosong", JOptionPane.WARNING_MESSAGE);
+                tanggalMulaiDatePicker.requestFocus();
+                return;
+            }
+
             if (populasiTextField.getText().equals("")){
                 populasiTextField.setText("0");
             }
@@ -135,6 +159,9 @@ public class KecamatanInputFrame extends JFrame {
                 luasTextField.requestFocus();
                 return;
             }
+
+//            String tanggalMulai = tanggalMulaiDatePicker.get
+
             Connection c = koneksi.getConnection();
             PreparedStatement ps;
             try {
@@ -147,15 +174,17 @@ public class KecamatanInputFrame extends JFrame {
                         JOptionPane.showMessageDialog(null,
                                 "Data sama sudah ada");
                     } else {
-                        String insertSQL = "INSERT INTO kecamatan (id, nama, kabupaten_id, klasifikasi " +
-                                "populasi, luas) " +
-                                "VALUES (NULL, ?, ?, ?, ?, ?)";
+                        String insertSQL = "INSERT INTO kecamatan (id, nama, kabupaten_id, klasifikasi, " +
+                                "populasi, luas, email, tanggalmulai) " +
+                                "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)";
                         ps = c.prepareStatement(insertSQL);
                         ps.setString(1, nama);
                         ps.setInt(2, kabupatenId);
                         ps.setString(3, klasifikasi);
                         ps.setInt(4, populasi);
                         ps.setDouble(5, luas);
+                        ps.setString(6, email);
+                        ps.setString(7, tanggalMulai);
                         ps.executeUpdate();
                         dispose();
                     }
@@ -170,14 +199,16 @@ public class KecamatanInputFrame extends JFrame {
                                 "Data sama sudah ada");
                     } else {
                         String updateSQL = "UPDATE kecamatan SET nama = ?, kabupaten_id = ?, klasifikasi = ?, " +
-                                "populasi = ?, luas = ? WHERE id = ?";
+                                "populasi = ?, luas = ?, email = ?, tanggalmulai = ? WHERE id = ?";
                         ps = c.prepareStatement(updateSQL);
                         ps.setString(1, nama);
                         ps.setInt(2, kabupatenId);
                         ps.setString(3, klasifikasi);
                         ps.setInt(4, populasi);
                         ps.setDouble(5, luas);
-                        ps.setInt(6, id);
+                        ps.setString(6, email);
+                        ps.setString(7, tanggalMulai);
+                        ps.setInt(8, id);
                         ps.executeUpdate();
                         dispose();
                     }
@@ -208,6 +239,10 @@ public class KecamatanInputFrame extends JFrame {
         klasifikasiButtonGroup = new ButtonGroup();
         klasifikasiButtonGroup.add(tipeARadioButton);
         klasifikasiButtonGroup.add(tipeBRadioButton);
+
+        DatePickerSettings dps = new DatePickerSettings();
+        dps.setFormatForDatesCommonEra("yyyy-MM-dd");
+        tanggalMulaiDatePicker.setSettings(dps);
 
         luasLabel.setText("Luas (Km\u00B2)");
         populasiTextField.setHorizontalAlignment(SwingConstants.RIGHT);
