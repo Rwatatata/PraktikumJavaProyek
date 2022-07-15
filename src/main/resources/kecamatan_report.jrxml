@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.19.1.final using JasperReports Library version 6.19.1-867c00bf88cd4d784d404379d6c05e1b419e8a4c  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Kabupaten_report" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8b5f4b4a-5239-4c79-9fdd-ccbfaa64ef8c">
+    <field name="id" class="java.lang.String">
+    </field>
+    <field name="nama" class="java.lang.String">
+    </field>
+    <background>
+        <band/>
+    </background>
+    <title>
+        <band height="72">
+            <frame>
+                <reportElement mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#006699" uuid="c374c95c-85b9-4f8c-a8f7-b4062e87d5bb"/>
+                <staticText>
+                    <reportElement x="20" y="20" width="234" height="43" forecolor="#FFFFFF" uuid="b862b9bd-b4d3-4f28-959c-06cbffd4f63c"/>
+                    <textElement>
+                        <font size="34" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[KECAMATAN]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="395" y="43" width="180" height="20" forecolor="#FFFFFF" uuid="29a1feb4-4da5-4347-8a4c-a3497293984d"/>
+                    <textElement textAlignment="Right">
+                        <font size="14" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Add a description here]]></text>
+                </staticText>
+            </frame>
+        </band>
+    </title>
+    <pageHeader>
+        <band height="13"/>
+    </pageHeader>
+    <columnHeader>
+        <band height="21">
+            <line>
+                <reportElement x="-20" y="20" width="595" height="1" forecolor="#666666" uuid="f88604b1-5be2-4328-b4ee-7381abb0ca44"/>
+            </line>
+            <staticText>
+                <reportElement mode="Opaque" x="0" y="0" width="130" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="f0ce67ea-539b-4a3c-9a8e-dcc324b22113">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1a92cb70-cf7a-4191-bc82-178ed27e1aec"/>
+                </reportElement>
+                <textElement textAlignment="Center">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Id]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="130" y="0" width="424" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="5a6409a7-422c-45a3-bc2c-45bef80488f6">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0d15df02-4039-43f9-b2a7-d11abd875eec"/>
+                </reportElement>
+                <textElement textAlignment="Center">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[NAMA KECAMATAN]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="20">
+            <line>
+                <reportElement positionType="FixRelativeToBottom" x="0" y="19" width="555" height="1" uuid="a4faa402-2bde-4844-98ca-97814f4f92ba"/>
+            </line>
+            <textField textAdjust="StretchHeight">
+                <reportElement x="0" y="0" width="80" height="20" uuid="08af757b-b7e9-4dd4-985a-5c9ab79c6c59">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1a92cb70-cf7a-4191-bc82-178ed27e1aec"/>
+                </reportElement>
+                <textElement>
+                    <font size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight">
+                <reportElement x="80" y="0" width="474" height="20" uuid="75c6dc9f-4344-45cd-b9e0-8b673ea89492">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0d15df02-4039-43f9-b2a7-d11abd875eec"/>
+                </reportElement>
+                <textElement>
+                    <font size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{nama}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+    <columnFooter>
+        <band/>
+    </columnFooter>
+    <pageFooter>
+        <band height="17">
+            <textField>
+                <reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="0194b2d7-54dd-477f-a92c-7235baa7876a"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+            </textField>
+            <textField evaluationTime="Report">
+                <reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="6d5dfc1c-15fc-409f-baf0-ebcc2e690b64"/>
+                <textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+            <textField pattern="EEEEE dd MMMMM yyyy">
+                <reportElement x="0" y="4" width="100" height="13" uuid="1e06ab10-5961-40f1-a4e2-e370efd59ba4"/>
+                <textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+    <summary>
+        <band/>
+    </summary>
+</jasperReport>

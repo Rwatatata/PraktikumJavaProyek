@@ -1,5 +1,6 @@
 package frame;
 
+import com.github.lgooddatepicker.components.DatePicker;
 import helpers.koneksi;
 
 import javax.swing.*;
@@ -14,6 +15,7 @@ public class KabupatenInputFrame extends JFrame {
     private JPanel buttonPanel;
     private JButton simpanButton;
     private JButton batalButton;
+    private DatePicker tanggalMulaiDatePicker;
 
     private int id;
 
@@ -36,6 +38,16 @@ public class KabupatenInputFrame extends JFrame {
                 namaTextField.requestFocus();
                 return;
             }
+
+            String tanggalMulai = tanggalMulaiDatePicker.getText();
+            if (tanggalMulai.equals("")){
+                JOptionPane.showMessageDialog(null,
+                        "Isi Tanggal Mulai",
+                        "Validasi Data Kosong", JOptionPane.WARNING_MESSAGE);
+                tanggalMulaiDatePicker.requestFocus();
+                return;
+            }
+
             Connection c = koneksi.getConnection();
             PreparedStatement ps;
             try {
@@ -49,9 +61,11 @@ public class KabupatenInputFrame extends JFrame {
                                 "Data sama sudah ada");
 
                     } else {
-                        String insertSQL = "INSERT INTO kabupaten VALUES (NULL, ?)";
+                        String insertSQL = "INSERT INTO kabupaten(id, nama, tanggalmulai) " +
+                        "VALUES (NULL, ?, ?)";
                         ps = c.prepareStatement(insertSQL);
                         ps.setString(1, nama);
+                        ps.setString(2, tanggalMulai);
                         ps.executeUpdate();
                         dispose();
                         }
@@ -65,10 +79,11 @@ public class KabupatenInputFrame extends JFrame {
                         JOptionPane.showMessageDialog(null,
                                 "Data sama sudah ada");
                     } else {
-                        String updateSQL = "UPDATE kabupaten SET nama =? WHERE id = ?";
+                        String updateSQL = "UPDATE kabupaten SET nama = ?, tanggalmulai = ? WHERE id = ?";
                         ps = c.prepareStatement(updateSQL);
                         ps.setString(1, nama);
-                        ps.setInt(2, id);
+                        ps.setString(2, tanggalMulai);
+                        ps.setInt(3, id);
                         ps.executeUpdate();
                         dispose();
                         }
@@ -100,6 +115,9 @@ public class KabupatenInputFrame extends JFrame {
                 idTextField.setText(String.valueOf(rs.getInt("id")));
                 namaTextField.setText(rs.getString("nama"));
             }
+
+            tanggalMulaiDatePicker.setText(rs.getString("tanggalMulai"));
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

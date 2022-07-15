@@ -1,6 +1,9 @@
 package frame;
 
+import helpers.JasperDataSourceBuilder;
 import helpers.koneksi;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.view.JasperViewer;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -62,10 +65,11 @@ public class KabupatenViewFrame extends JFrame {
                 ResultSet rs = ps.executeQuery();
                 DefaultTableModel dtm = (DefaultTableModel) viewTable.getModel();
                 dtm.setRowCount(0);
-                Object[] row = new Object[2];
+                Object[] row = new Object[3];
                 while (rs.next()){
                     row[0] = rs.getInt("id");
                     row[1] = rs.getString("nama");
+                    row[2] = rs.getString("tanggalIndo");
                     dtm.addRow(row);
                 }
             } catch (SQLException ex) {
@@ -113,9 +117,47 @@ public class KabupatenViewFrame extends JFrame {
             inputFrame.isiKomponen();
             inputFrame.setVisible(true);
         });
+
+        cetakButton.addActionListener(e -> {
+            Connection c = koneksi.getConnection();
+            String selectSQL = "SELECT * FROM kabupaten";
+            Object[][] row;
+            try {
+                Statement s = c.createStatement(
+                        ResultSet.TYPE_SCROLL_SENSITIVE,
+                        ResultSet.CONCUR_UPDATABLE);
+                ResultSet rs = s.executeQuery(selectSQL);
+                rs.last();
+                int jumlah = rs.getRow();
+                row = new Object[jumlah][2];
+                int i = 0;
+                rs.beforeFirst();
+                while (rs.next()){
+                    row[i][0] = rs.getInt("id");
+                    row[i][1] = rs.getString("nama");
+                    i++;
+                }
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+            try {
+                JasperReport jasperReport =
+                        JasperCompileManager.compileReport("D:/PraktikumJavaProyek/PraktikumJavaProyek" +
+                                "/src/main/resources/kabupaten_report.jrxml");
+                                JasperPrint jasperPrint =
+                                        JasperFillManager.fillReport(jasperReport,null, new
+                                                JasperDataSourceBuilder(row));
+                JasperViewer viewer = new JasperViewer(jasperPrint, false);
+                viewer.setVisible(true);
+            } catch (JRException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
         isiTable();
         init();
     }
+
 
     public void init() {
         setContentPane(mainPanel);
@@ -131,13 +173,24 @@ public class KabupatenViewFrame extends JFrame {
         try {
             Statement s = c.createStatement();
             ResultSet rs = s.executeQuery(selectSQL);
-            String header[] = {"Id", "Nama Kabupaten"};
+            String header[] = {"Id", "Nama Kabupaten", "Tanggal"};
             DefaultTableModel dtm = new DefaultTableModel(header, 0);
             viewTable.setModel(dtm);
-            Object[] row = new Object[2];
+            Object[] row = new Object[3];
             while (rs.next()){
+
+                String tanggalIndo = "";
+                if(rs.getString("tanggalmulai") != null){
+                    String tanggalString = rs.getString("tanggalmulai").substring(8);
+                    String bulanString = rs.getString("tanggalmulai").substring(5,7);
+                    String tahunString = rs.getString("tanggalmulai").substring(0,4);
+
+                    tanggalIndo = tanggalString + "-" + bulanString + "-" +tahunString;
+                }
+
                 row[0] = rs.getInt("id");
                 row[1] = rs.getString("nama");
+                row[2] = tanggalIndo;
                 dtm.addRow(row);
             }
         } catch (SQLException e) {

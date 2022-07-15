@@ -160,8 +160,6 @@ public class KecamatanInputFrame extends JFrame {
                 return;
             }
 
-//            String tanggalMulai = tanggalMulaiDatePicker.get
-
             Connection c = koneksi.getConnection();
             PreparedStatement ps;
             try {
